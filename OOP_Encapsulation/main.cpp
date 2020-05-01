@@ -152,6 +152,7 @@ public:
     void setNickname(string nickname) {
         uint nicknameLength = (uint)nickname.length();
         if (nicknameLength > MAX_NICKNAME_LENGTH) throw domain_error("Nickname length greater than max. Expected " + to_string(MAX_NICKNAME_LENGTH) + ", got " + to_string(nicknameLength));
+        this->nickname = nickname;
     }
     
     // ActionSubscriber
@@ -173,7 +174,7 @@ public:
 };
 
 class Action {
-    // Encapsulation by abstraction
+    // Encapsulation by abstraction (using late binding)
 public:
     virtual void execute() = 0;
     virtual string getDescription() = 0;
@@ -201,7 +202,6 @@ public:
         
         int direction = random1 % 3;
         BuffsDelta buffsDelta;
-        // Behavour **extension**
         if (direction == 0) {
             cout << subscriber->getSubscriberDescription() << " found magical herb in the Himalayas 🌿" << endl;
             StatsDeltaMultiply herb = {.multiplyHealth = 1.5, .multiplyLevel = 1.5};
@@ -270,7 +270,6 @@ public:
         this->admin = &admin;
     }
     
-    // Behaviour override
     void execute() override {
         bool willDie = rand() % 2;
         if (willDie) {
@@ -322,7 +321,7 @@ private:
             string input;
             cin >> input;
             if (availableActions.count(input) > 0) {
-                // Encapsulation using abstractions
+                // Encapsulation by abstraction (using late binding)
                 availableActions[input]->execute();
             };
         }
